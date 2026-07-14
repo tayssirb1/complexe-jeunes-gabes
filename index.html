@@ -6,7 +6,6 @@
 <title>Complexe Jeunes Gabes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{
   --teal-950:#0B2626; --teal-900:#0E2F2F; --teal-800:#123B3B; --teal-700:#175050;
@@ -40,7 +39,6 @@ a{color:inherit;}
 .auth-visual::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(600px 400px at 15% 110%, rgba(62,133,100,.30), transparent 60%),
   radial-gradient(500px 350px at 90% -10%, rgba(201,151,60,.22), transparent 60%);}
-#auth-bg{position:absolute;inset:0;z-index:0;}
 .auth-brand{position:relative;z-index:2;display:flex;align-items:center;gap:12px;pointer-events:none;}
 .auth-brand-name{font-family:var(--font-display);font-size:20px;font-weight:700;}
 .auth-hero{position:relative;z-index:2;max-width:460px;pointer-events:none;}
@@ -48,8 +46,6 @@ a{color:inherit;}
 .auth-hero p{color:#B7CFC7;font-size:14.5px;line-height:1.6;margin-bottom:16px;}
 .auth-clubs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;pointer-events:none;}
 .auth-club-chip{font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display: flex;align-items: center;gap: 6px;}
-.auth-fb{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;color:#EFEBDD;font-size:13px;font-weight:600;padding:9px 14px;border-radius:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);transition:.15s;width:fit-content;pointer-events:auto;}
-.auth-fb:hover{background:rgba(255,255,255,.15);}
 .auth-foot{position:relative;z-index:2;font-size:11.5px;color:#7FA79A;font-family:var(--font-mono);pointer-events:none;}
 
 .auth-panel{width:440px;flex-shrink:0;background:var(--bg);display:flex;flex-direction:column;justify-content:center;padding:48px;overflow-y:auto;}
@@ -65,15 +61,43 @@ a{color:inherit;}
 .field input:focus,.field select:focus{outline:none;border-color:var(--palm-500);box-shadow:0 0 0 3px rgba(62,133,100,.14);}
 .btn-primary{width:100%;padding:12px;background:var(--teal-900);color:#fff;border-radius:9px;font-weight:600;font-size:14px;transition:.15s;margin-top:6px;}
 .btn-primary:hover{background:var(--teal-800);}
+.btn-ghost{padding:10px 16px;border-radius:9px;font-weight:600;font-size:13px;color:var(--ink-soft);background:rgba(0,0,0,.04);transition:.15s;}
+.btn-ghost:hover{background:rgba(0,0,0,.08);color:var(--ink);}
+
+/* ---------- Club selection ---------- */
+#club-screen{position:fixed;inset:0;z-index:480;background:var(--bg);display:none;flex-direction:column;align-items:center;padding:56px 20px;overflow-y:auto;}
+#club-screen.show{display:flex;}
+.club-select-head{max-width:640px;text-align:center;margin-bottom:34px;}
+.club-select-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.09em;color:var(--palm-600);text-transform:uppercase;margin-bottom:10px;}
+.club-select-head h1{font-family:var(--font-display);font-size:28px;margin-bottom:8px;}
+.club-select-head p{color:var(--ink-soft);font-size:14px;}
+.club-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;width:100%;max-width:900px;margin-bottom:30px;}
+.club-tile{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:20px;text-align:left;transition:.15s;position:relative;overflow:hidden;}
+.club-tile:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--palm-500);}
+.club-tile.selected{border-color:var(--palm-500);box-shadow:0 0 0 3px rgba(62,133,100,.14);}
+.club-tile-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff;}
+.club-tile h3{font-family:var(--font-display);font-size:15.5px;margin-bottom:5px;}
+.club-tile p{font-size:12.3px;color:var(--ink-soft);line-height:1.5;}
+.club-tile .check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.15s;}
+.club-tile.selected .check{background:var(--palm-500);border-color:var(--palm-500);color:#fff;}
+.club-select-actions{display:flex;gap:10px;}
 
 /* ---------- App shell ---------- */
-#app{display:none;height:100vh;}
+#app{display:none;height:100vh;position:relative;}
 #app.ready{display:flex;}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(11,38,38,.45);z-index:399;}
+.sidebar-backdrop.show{display:block;}
 .sidebar{width:260px;flex-shrink:0;background:var(--teal-950);color:#DDEDE7;display:flex;flex-direction:column;}
 .sidebar-header{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;}
 .sidebar-header .name{font-family:var(--font-display);font-weight:700;font-size:15px;line-height:1.2;color:#F3F0E2;}
 .sidebar-header .sub{font-size:10px;color:#7FA79A;font-family:var(--font-mono);letter-spacing:.03em;}
 .nav-scroll{flex:1;overflow-y:auto;padding-bottom:10px;}
+.club-switch{margin:0 12px 6px;padding:10px 11px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;gap:9px;transition:.15s;}
+.club-switch:hover{background:rgba(255,255,255,.11);}
+.club-switch-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.club-switch-text{flex:1;min-width:0;}
+.club-switch-text b{display:block;font-size:12.5px;color:#F3F0E2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.club-switch-text span{font-size:10px;color:#7FA79A;}
 .sidebar-nav{padding:6px 12px;}
 .nav-section-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5E8579;font-weight:700;padding:12px 10px 6px;display:flex;justify-content:space-between;align-items:center;}
 .nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13.3px;color:#C6DDD5;cursor:pointer;transition:.12s;margin-bottom:1px;}
@@ -85,8 +109,6 @@ a{color:inherit;}
 .presence-label{font-size:11.3px;color:#8FB6AA;}
 .presence-dot{width:7px;height:7px;border-radius:50%;background:#5FD79A;box-shadow:0 0 0 2px rgba(95,215,154,.25);flex-shrink:0;}
 
-.fb-link{display:flex;align-items:center;gap:8px;padding:9px 12px;margin:2px 12px 8px;border-radius:9px;color:#8FB6AA;font-size:11.5px;font-weight:600;background:rgba(255,255,255,.05);text-decoration:none;transition:.15s;}
-.fb-link:hover{background:rgba(255,255,255,.1);color:#EDE9DB;}
 .sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;}
 .avatar{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;font-family:var(--font-display);background: var(--palm-500);}
 .user-meta{flex:1;min-width:0;}
@@ -97,7 +119,9 @@ a{color:inherit;}
 
 .main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);}
 .topbar{height:60px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:var(--surface);gap:14px;}
-.topbar-left{display:flex;align-items:center;min-width:0;}
+.topbar-left{display:flex;align-items:center;min-width:0;gap:12px;}
+.menu-btn{display:none;width:34px;height:34px;border-radius:8px;align-items:center;justify-content:center;color:var(--ink-soft);flex-shrink:0;}
+.menu-btn:hover{background:rgba(0,0,0,.05);}
 .topbar-title{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:16.5px;white-space:nowrap;}
 .topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .search-box{display:flex;align-items:center;gap:8px;background:#F2F0E6;border-radius:9px;padding:8px 12px;width:220px;color:var(--ink-soft);}
@@ -133,16 +157,12 @@ a{color:inherit;}
 .add-card-btn{margin:6px 4px;padding:10px;border-radius:8px;font-size:13px;color:var(--ink-soft);text-align:left;transition:.12s;display:flex;align-items:center;gap:6px;font-weight:500;}
 .add-card-btn:hover{background:rgba(0,0,0,.04);color:var(--ink);}
 
-.new-list-col{width:250px;flex-shrink:0;}
-.new-list-btn{width:100%;padding:12px 14px;border-radius:var(--radius);color:var(--ink-soft);font-size:13.5px;font-weight:600;text-align:left;background:rgba(0,0,0,.03);transition:.12s;}
-.new-list-btn:hover{background:rgba(0,0,0,.06);color:var(--ink);}
-
 /* ---------- AI Assistant Panel ---------- */
 .ai-fab{position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--teal-900);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(14,47,47,.35);z-index:600;transition:.2s;}
 .ai-fab:hover{transform:scale(1.06);background:var(--teal-800);}
 .ai-fab .ring{position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--sand-400);opacity:.6;animation:ripple 2.6s ease-out infinite;}
 @keyframes ripple{0%{transform:scale(.85);opacity:.7;}100%{transform:scale(1.35);opacity:0;}}
-.ai-panel{position:fixed;bottom:98px;right:26px;width:390px;height:540px;background:var(--surface);border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.3);z-index:600;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line);}
+.ai-panel{position:fixed;bottom:98px;right:26px;width:390px;height:560px;background:var(--surface);border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.3);z-index:600;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line);}
 .ai-panel.show{display:flex;}
 .ai-head{background:var(--teal-950);color:#EDE9DB;padding:16px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .ai-head-text b{font-family:var(--font-display);font-size:14.5px;display:block;}
@@ -153,23 +173,32 @@ a{color:inherit;}
 .ai-msg{max-width:88%;font-size:13.3px;line-height:1.55;padding:9px 13px;border-radius:12px;white-space:pre-wrap;word-break:break-word;}
 .ai-msg.user{align-self:flex-end;background:var(--teal-900);color:#fff;border-bottom-right-radius:4px;}
 .ai-msg.bot{align-self:flex-start;background:#EFEDE2;color:var(--ink);border-bottom-left-radius:4px;}
-.ai-msg.typing{display:none;gap:4px;align-items:center;padding:12px 14px;background:#EFEDE2;align-self:flex-start;}
-.ai-msg.typing.show{display:flex;}
-.ai-msg.typing span{width:6px;height:6px;border-radius:50%;background:#9AA69E;animation:blink 1.2s infinite;}
-.ai-msg.typing span:nth-child(2){animation-delay:.2s;}
-.ai-msg.typing span:nth-child(3){animation-delay:.4s;}
+.ai-msg.error{align-self:center;background:#F7E7E4;color:var(--danger);font-size:12px;text-align:center;}
+.ai-status{align-self:flex-start;display:none;gap:7px;align-items:center;padding:9px 13px;background:#EFEDE2;border-radius:12px;border-bottom-left-radius:4px;font-size:12px;color:var(--ink-soft);}
+.ai-status.show{display:flex;}
+.ai-status .dots{display:flex;gap:4px;}
+.ai-status .dots span{width:5px;height:5px;border-radius:50%;background:#9AA69E;animation:blink 1.2s infinite;}
+.ai-status .dots span:nth-child(2){animation-delay:.2s;}
+.ai-status .dots span:nth-child(3){animation-delay:.4s;}
 @keyframes blink{0%,80%,100%{opacity:.3;}40%{opacity:1;}}
 .ai-composer{border-top:1px solid var(--line);padding:10px;display:flex;gap:8px;flex-shrink:0;}
 .ai-composer input{flex:1;border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.3px;}
 .ai-composer input:focus{outline:none;border-color:var(--palm-500);}
-.ai-send{width:38px;height:38px;background:var(--teal-900);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ai-composer input:disabled{opacity:.6;}
+.ai-send{width:38px;height:38px;background:var(--teal-900);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
+.ai-send:disabled{opacity:.5;cursor:default;}
 
 @media (max-width:900px){
-  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:400;transform:translateX(-100%);transition:.22s ease;}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:400;transform:translateX(-100%);transition:.22s ease;box-shadow:0 0 40px rgba(0,0,0,.3);}
   .sidebar.open{transform:translateX(0);}
+  .menu-btn{display:flex;}
   .auth-visual{display:none;}
   .auth-panel{width:100%;padding:30px 20px;}
-  .ai-panel{width:calc(100vw - 24px);right:12px;height:70vh;}
+  .search-box{display:none;}
+  .ai-panel{width:calc(100vw - 24px);right:12px;left:12px;height:72vh;bottom:90px;}
+  .ai-fab{bottom:20px;right:20px;}
+  .club-select-head h1{font-size:22px;}
+  #club-screen{padding:36px 16px;}
 }
 </style>
 </head>
@@ -184,7 +213,6 @@ a{color:inherit;}
 
 <div id="auth-screen">
   <div class="auth-visual">
-    <canvas id="auth-bg"></canvas>
     <div class="auth-brand">
       <svg width="30" height="30" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#D9AE5C" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
       <span class="auth-brand-name">Complexe Jeunes Gabes</span>
@@ -192,11 +220,7 @@ a{color:inherit;}
     <div class="auth-hero">
       <h1>L'espace de travail de vos clubs, sous un même toit.</h1>
       <p>Rejoignez votre club, suivez vos tâches, discutez avec les membres et retrouvez tout le monde connecté au même endroit.</p>
-      <div class="auth-clubs">
-        <span class="auth-club-chip"><div class="nav-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg></div> ناد الدراجات</span>
-        <span class="auth-club-chip"><div class="nav-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div> ناد الشطرنج</span>
-        <span class="auth-club-chip"><div class="nav-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div> Développement Web</span>
-      </div>
+      <div class="auth-clubs" id="auth-club-chips"></div>
     </div>
     <div class="auth-foot">GABES · TUNISIA</div>
   </div>
@@ -217,13 +241,31 @@ a{color:inherit;}
   </div>
 </div>
 
+<div id="club-screen">
+  <div class="club-select-head">
+    <div class="club-select-eyebrow">Étape 2 sur 2</div>
+    <h1>Choisissez votre club</h1>
+    <p>Sélectionnez le club auquel vous voulez accéder. Vous pourrez en changer à tout moment depuis la barre latérale.</p>
+  </div>
+  <div class="club-grid" id="club-grid"></div>
+  <div class="club-select-actions">
+    <button class="btn-primary" id="enter-club-btn" style="width:auto;padding:12px 28px;" disabled>Entrer dans l'espace</button>
+  </div>
+</div>
+
 <div id="app">
-  <div class="sidebar">
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <svg width="28" height="28" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#D9AE5C" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
       <div><div class="name">Complexe Jeunes</div><div class="sub">WORKSPACE</div></div>
     </div>
     <div class="nav-scroll">
+      <div class="club-switch" id="club-switch-btn">
+        <div class="club-switch-icon" id="club-switch-icon"></div>
+        <div class="club-switch-text"><b id="club-switch-name">Choisir un club</b><span>Changer de club</span></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7FA79A" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+      </div>
       <div class="sidebar-nav">
         <div class="nav-item active" id="nav-dash-btn">
           <div class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -231,7 +273,7 @@ a{color:inherit;}
         </div>
         <div class="nav-item" id="nav-board-btn">
           <div class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></div>
-          <span>Gestion des Clubs</span>
+          <span>Gestion du Club</span>
         </div>
       </div>
       <div class="sidebar-nav">
@@ -242,29 +284,45 @@ a{color:inherit;}
     <div class="sidebar-footer">
       <div class="avatar">U</div>
       <div class="user-meta"><div class="un" id="user-display-name">Membre</div><div class="ue" id="user-display-email">membre@complexe.tn</div></div>
+      <button class="logout-btn" id="logout-btn" title="Se déconnecter">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
   </div>
 
   <div class="main">
     <div class="topbar">
       <div class="topbar-left">
+        <button class="menu-btn" id="menu-toggle-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <div class="topbar-title"><span id="view-title">Tableau de bord</span></div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Rechercher...">
+        </div>
       </div>
     </div>
 
     <div id="dashboard-view" class="view active">
       <div class="dash-welcome">
         <h1 id="welcome-text">Bienvenue</h1>
-        <p>Voici un aperçu de l'activité globale au sein de votre complexe.</p>
+        <p id="dash-sub">Voici un aperçu de l'activité de votre club.</p>
       </div>
       <div class="dash-grid">
         <div class="dash-card">
-          <div class="top"><h3>Projets Actifs</h3></div>
-          <div class="dash-stats"><b>12</b> Clubs Opérationnels</div>
+          <div class="top"><h3>Cartes actives</h3></div>
+          <div class="dash-stats"><b id="stat-active">0</b> à faire + en cours</div>
         </div>
         <div class="dash-card">
-          <div class="top"><h3>Tâches Assignées</h3></div>
-          <div class="dash-stats"><b>4</b> En attente d'action</div>
+          <div class="top"><h3>Terminées</h3></div>
+          <div class="dash-stats"><b id="stat-done">0</b> tâches complétées</div>
+        </div>
+        <div class="dash-card" id="switch-club-card">
+          <div class="top"><h3>Changer de club</h3></div>
+          <div class="dash-stats">Cliquez pour rejoindre un autre club</div>
         </div>
       </div>
     </div>
@@ -296,12 +354,12 @@ a{color:inherit;}
 
 <div class="ai-panel" id="ai-panel">
   <div class="ai-head">
-    <div class="ai-head-text"><b>Assistant Intelligent</b><span>En ligne · Réponses instantanées</span></div>
+    <div class="ai-head-text"><b>Assistant Intelligent</b><span>Connecté à internet · Réponses en direct</span></div>
     <button class="ai-close" id="close-ai-btn">✕</button>
   </div>
   <div class="ai-body" id="ai-chat-body">
-    <div class="ai-msg bot">Bonjour ! Je suis votre assistant pro dédié. Comment puis-je vous aider à organiser vos clubs aujourd'hui ?</div>
-    <div class="ai-msg typing" id="ai-typing-indicator"><span></span><span></span><span></span></div>
+    <div class="ai-msg bot">Bonjour ! Je suis votre assistant, connecté à internet pour vous donner des informations à jour. Posez-moi n'importe quelle question sur votre club, vos événements, ou même une recherche générale.</div>
+    <div class="ai-status" id="ai-status"><div class="dots"><span></span><span></span><span></span></div><span id="ai-status-text">Réflexion en cours...</span></div>
   </div>
   <div class="ai-composer">
     <input type="text" id="ai-input" placeholder="Posez votre question ici...">
@@ -312,11 +370,52 @@ a{color:inherit;}
 </div>
 
 <script>
-// Simulator States & Interactions
-let currentMode = 'login';
+// ---------------------------------------------------------------
+// Club catalogue
+// ---------------------------------------------------------------
+const CLUBS = [
+  { id:'cyclisme', name:'Club Cyclisme', nameAr:'ناد الدراجات', color:'#3E8564',
+    desc:"Sorties, entretien vélo et compétitions régionales.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>` },
+  { id:'echecs', name:'Club Échecs', nameAr:'ناد الشطرنج', color:'#175050',
+    desc:"Tournois hebdomadaires, ouvertures et analyse de parties.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>` },
+  { id:'devweb', name:'Développement Web', nameAr:'', color:'#C9973C',
+    desc:"Ateliers de code, projets collectifs et mentorat technique.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>` },
+  { id:'musique', name:'Club Musique', nameAr:'', color:'#B8483F',
+    desc:"Répétitions, jam sessions et petits concerts du complexe.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>` },
+  { id:'photo', name:'Club Photographie', nameAr:'', color:'#5B6864',
+    desc:"Sorties photo, retouche et exposition annuelle.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>` },
+  { id:'theatre', name:"Club Théâtre", nameAr:'', color:'#7A5C8E',
+    desc:"Improvisation, mise en scène et pièces de fin d'année.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="1.6"/><circle cx="15" cy="9" r="1.6"/><path d="M8 15c1 1.4 2.4 2 4 2s3-.6 4-2"/><circle cx="12" cy="12" r="10"/></svg>` },
+];
 
-// Boot Layer Escape Animation
+const DEFAULT_BOARDS = {
+  cyclisme: { todo:['Réserver la salle omnisports', "Planifier la sortie du samedi"], doing:['Entretien des vélos communs'], done:['Validation du budget annuel'] },
+  echecs:   { todo:['Préparer le tournoi mensuel'], doing:['Analyse des parties de la semaine'], done:['Achat de 3 nouveaux échiquiers'] },
+  devweb:   { todo:['Lancer les inscriptions du club informatique'], doing:['Création de la charte graphique du site'], done:['Mise en place du dépôt Git'] },
+  musique:  { todo:['Réserver la salle de répétition'], doing:['Préparer le set du concert'], done:[] },
+  photo:    { todo:['Organiser la sortie photo côtière'], doing:[], done:['Sélection des photos pour l\'exposition'] },
+  theatre:  { todo:['Distribuer les rôles de la pièce'], doing:['Répétitions du deuxième acte'], done:[] },
+};
+
+let selectedClubId = null;
+let pendingClubId = null;
+let cardsData = null;
+let userEmail = 'membre@complexe.tn';
+
+function clubById(id){ return CLUBS.find(c => c.id === id); }
+
+// ---------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
+  renderAuthChips();
+  renderClubGrid();
   setTimeout(() => {
     const boot = document.getElementById('boot');
     boot.style.opacity = '0';
@@ -324,7 +423,19 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 1000);
 });
 
-// Tab Switching Auth Configuration
+function renderAuthChips(){
+  const wrap = document.getElementById('auth-club-chips');
+  wrap.innerHTML = CLUBS.slice(0,3).map(c => `
+    <span class="auth-club-chip">
+      <div class="nav-icon">${c.icon}</div>
+      ${c.nameAr || c.name}
+    </span>`).join('');
+}
+
+// ---------------------------------------------------------------
+// Auth tabs
+// ---------------------------------------------------------------
+let currentMode = 'login';
 const tabLogin = document.getElementById('tab-btn-login');
 const tabSignup = document.getElementById('tab-btn-signup');
 const authTitle = document.querySelector('.auth-panel h2');
@@ -349,118 +460,248 @@ tabSignup.addEventListener('click', () => {
   submitAuthBtn.innerText = 'Créer mon compte';
 });
 
-// App Login Routing Simulation
 submitAuthBtn.addEventListener('click', () => {
-  const emailInput = document.getElementById('auth-email').value || 'membre@complexe.tn';
-  document.getElementById('user-display-email').innerText = emailInput;
-  document.getElementById('user-display-name').innerText = emailInput.split('@')[0];
-  document.getElementById('welcome-text').innerText = `Ravi de vous voir, ${emailInput.split('@')[0]}`;
-  
+  userEmail = document.getElementById('auth-email').value || 'membre@complexe.tn';
+  document.getElementById('user-display-email').innerText = userEmail;
+  document.getElementById('user-display-name').innerText = userEmail.split('@')[0];
+
   document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('app').classList.add('ready');
+  document.getElementById('club-screen').classList.add('show');
 });
 
-// View Navigation Layout Management
+// ---------------------------------------------------------------
+// Club selection screen
+// ---------------------------------------------------------------
+function renderClubGrid(){
+  const grid = document.getElementById('club-grid');
+  grid.innerHTML = CLUBS.map(c => `
+    <button class="club-tile" data-club="${c.id}">
+      <div class="check">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="club-tile-icon" style="background:${c.color}">${c.icon}</div>
+      <h3>${c.name}${c.nameAr ? ' · ' + c.nameAr : ''}</h3>
+      <p>${c.desc}</p>
+    </button>`).join('');
+
+  grid.querySelectorAll('.club-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      grid.querySelectorAll('.club-tile').forEach(t => t.classList.remove('selected'));
+      tile.classList.add('selected');
+      pendingClubId = tile.dataset.club;
+      document.getElementById('enter-club-btn').disabled = false;
+    });
+  });
+}
+
+document.getElementById('enter-club-btn').addEventListener('click', () => {
+  if(!pendingClubId) return;
+  enterClub(pendingClubId);
+});
+
+function enterClub(clubId){
+  selectedClubId = clubId;
+  if(!cardsData) cardsData = {};
+  if(!cardsData[clubId]){
+    cardsData[clubId] = JSON.parse(JSON.stringify(DEFAULT_BOARDS[clubId] || { todo:[], doing:[], done:[] }));
+  }
+  const club = clubById(clubId);
+
+  document.getElementById('club-switch-icon').style.background = club.color;
+  document.getElementById('club-switch-icon').innerHTML = club.icon;
+  document.getElementById('club-switch-name').innerText = club.name;
+  document.getElementById('welcome-text').innerText = `Ravi de vous voir, ${userEmail.split('@')[0]}`;
+  document.getElementById('dash-sub').innerText = `Voici un aperçu de l'activité du ${club.name}.`;
+
+  document.getElementById('club-screen').classList.remove('show');
+  document.getElementById('app').classList.add('ready');
+
+  renderKanban();
+  goToView('dash');
+}
+
+document.getElementById('club-switch-btn').addEventListener('click', openClubSwitcher);
+document.getElementById('switch-club-card').addEventListener('click', openClubSwitcher);
+
+function openClubSwitcher(){
+  pendingClubId = selectedClubId;
+  document.getElementById('app').classList.remove('ready');
+  document.getElementById('club-screen').classList.add('show');
+  document.querySelectorAll('.club-tile').forEach(t => {
+    t.classList.toggle('selected', t.dataset.club === selectedClubId);
+  });
+  document.getElementById('enter-club-btn').disabled = !selectedClubId;
+  closeSidebarMobile();
+}
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  document.getElementById('app').classList.remove('ready');
+  document.getElementById('club-screen').classList.remove('show');
+  document.getElementById('auth-screen').style.display = 'flex';
+  selectedClubId = null;
+  pendingClubId = null;
+  document.getElementById('enter-club-btn').disabled = true;
+  document.querySelectorAll('.club-tile').forEach(t => t.classList.remove('selected'));
+});
+
+// ---------------------------------------------------------------
+// View navigation
+// ---------------------------------------------------------------
 const navDash = document.getElementById('nav-dash-btn');
 const navBoard = document.getElementById('nav-board-btn');
 const viewDash = document.getElementById('dashboard-view');
 const viewBoard = document.getElementById('board-view');
 const viewTitle = document.getElementById('view-title');
 
-navDash.addEventListener('click', () => {
-  navDash.classList.add('active');
-  navBoard.classList.remove('active');
-  viewDash.classList.add('active');
-  viewBoard.classList.remove('active');
-  viewTitle.innerText = 'Tableau de bord';
+function goToView(name){
+  if(name === 'dash'){
+    navDash.classList.add('active'); navBoard.classList.remove('active');
+    viewDash.classList.add('active'); viewBoard.classList.remove('active');
+    viewTitle.innerText = 'Tableau de bord';
+  } else {
+    navBoard.classList.add('active'); navDash.classList.remove('active');
+    viewBoard.classList.add('active'); viewDash.classList.remove('active');
+    const club = clubById(selectedClubId);
+    viewTitle.innerText = `Gestion · ${club ? club.name : ''}`;
+  }
+  closeSidebarMobile();
+}
+navDash.addEventListener('click', () => goToView('dash'));
+navBoard.addEventListener('click', () => goToView('board'));
+
+// ---------------------------------------------------------------
+// Mobile sidebar toggle
+// ---------------------------------------------------------------
+const sidebarEl = document.getElementById('sidebar');
+const backdropEl = document.getElementById('sidebar-backdrop');
+document.getElementById('menu-toggle-btn').addEventListener('click', () => {
+  sidebarEl.classList.add('open');
+  backdropEl.classList.add('show');
 });
+backdropEl.addEventListener('click', closeSidebarMobile);
+function closeSidebarMobile(){
+  sidebarEl.classList.remove('open');
+  backdropEl.classList.remove('show');
+}
 
-navBoard.addEventListener('click', () => {
-  navBoard.classList.add('active');
-  navDash.classList.remove('active');
-  viewBoard.classList.add('active');
-  viewDash.classList.remove('active');
-  viewTitle.innerText = 'Gestion de Projets / Clubs';
-});
-
-// Functional Kanban System Logic
-const cardsData = {
-  todo: ['Lancer les inscriptions du club informatique', 'Réserver la salle omnisports'],
-  doing: ['Création de la charte graphique'],
-  done: ['Validation du budget annuel']
-};
-
+// ---------------------------------------------------------------
+// Kanban board (per club)
+// ---------------------------------------------------------------
 function renderKanban() {
+  if(!selectedClubId) return;
+  const board = cardsData[selectedClubId];
   ['todo', 'doing', 'done'].forEach(status => {
     const container = document.getElementById(`cards-${status}`);
     const countBadge = document.getElementById(`count-${status}`);
     container.innerHTML = '';
-    cardsData[status].forEach(cardText => {
+    board[status].forEach(cardText => {
       const cardEl = document.createElement('div');
       cardEl.className = 'card';
-      cardEl.innerHTML = `<div class="ctitle">${cardText}</div>`;
+      cardEl.innerHTML = `<div class="ctitle"></div>`;
+      cardEl.querySelector('.ctitle').innerText = cardText;
       container.appendChild(cardEl);
     });
-    countBadge.innerText = cardsData[status].length;
+    countBadge.innerText = board[status].length;
   });
+  document.getElementById('stat-active').innerText = board.todo.length + board.doing.length;
+  document.getElementById('stat-done').innerText = board.done.length;
 }
 
 function promptAddCard(status) {
   const title = prompt("Entrez l'intitulé ou l'objectif de la nouvelle carte :");
   if (title && title.trim() !== "") {
-    cardsData[status].push(title.trim());
+    cardsData[selectedClubId][status].push(title.trim());
     renderKanban();
   }
 }
-renderKanban();
 
-// Interactive Chat Bot Framework
+// ---------------------------------------------------------------
+// Real AI chat — calls the Anthropic API with web search enabled
+// ---------------------------------------------------------------
 const aiFab = document.getElementById('open-ai-btn');
 const aiPanel = document.getElementById('ai-panel');
 const aiClose = document.getElementById('close-ai-btn');
 const aiInput = document.getElementById('ai-input');
 const aiSend = document.getElementById('ai-send-btn');
 const aiChatBody = document.getElementById('ai-chat-body');
-const typingIndicator = document.getElementById('ai-typing-indicator');
+const aiStatus = document.getElementById('ai-status');
+const aiStatusText = document.getElementById('ai-status-text');
 
-aiFab.addEventListener('click', () => aiPanel.classList.add('show'));
+aiFab.addEventListener('click', () => { aiPanel.classList.add('show'); aiInput.focus(); });
 aiClose.addEventListener('click', () => aiPanel.classList.remove('show'));
 
-function handleBotResponse(userMsg) {
-  typingIndicator.classList.add('show');
+// Full conversation history sent with every request (the API has no memory of its own)
+let chatHistory = [];
+
+function addMsg(role, text){
+  const el = document.createElement('div');
+  el.className = `ai-msg ${role}`;
+  el.innerText = text;
+  aiChatBody.insertBefore(el, aiStatus);
   aiChatBody.scrollTop = aiChatBody.scrollHeight;
-
-  setTimeout(() => {
-    typingIndicator.classList.remove('show');
-    let reply = "Je comprends votre demande concernant l'organisation du complexe. Souhaitez-vous planifier une réunion d'équipe à ce sujet ?";
-    
-    if(userMsg.toLowerCase().includes('trello') || userMsg.toLowerCase().includes('carte')) {
-      reply = "Votre tableau Kanban a été restructuré de manière professionnelle. Vous pouvez cliquer sur '+ Ajouter une carte' sous chaque colonne pour gérer vos projets.";
-    } else if(userMsg.toLowerCase().includes('club')) {
-      reply = "Les sections des clubs d'échecs, de cyclisme et de développement web disposent désormais de structures de gestion de données optimisées.";
-    }
-
-    const replyEl = document.createElement('div');
-    replyEl.className = 'ai-msg bot';
-    replyEl.innerText = reply;
-    aiChatBody.insertBefore(replyEl, typingIndicator);
-    aiChatBody.scrollTop = aiChatBody.scrollHeight;
-  }, 1200);
+  return el;
 }
 
-function sendUserMsg() {
+function setBusy(busy, label){
+  aiStatus.classList.toggle('show', busy);
+  if(label) aiStatusText.innerText = label;
+  aiInput.disabled = busy;
+  aiSend.disabled = busy;
+  aiChatBody.scrollTop = aiChatBody.scrollHeight;
+}
+
+async function sendUserMsg() {
   const txt = aiInput.value.trim();
   if(!txt) return;
 
-  const msgEl = document.createElement('div');
-  msgEl.className = 'ai-msg user';
-  msgEl.innerText = txt;
-  aiChatBody.insertBefore(msgEl, typingIndicator);
-  
+  addMsg('user', txt);
+  chatHistory.push({ role:'user', content: txt });
   aiInput.value = '';
-  aiChatBody.scrollTop = aiChatBody.scrollHeight;
+  setBusy(true, 'Réflexion en cours...');
 
-  handleBotResponse(txt);
+  const club = clubById(selectedClubId);
+  const board = selectedClubId ? cardsData[selectedClubId] : null;
+
+  const systemContext = `Tu es l'assistant intégré de l'application "Complexe Jeunes Gabes", un espace de travail pour les clubs de jeunes à Gabes, Tunisie. Réponds en français, de façon chaleureuse, concise et utile. Tu as accès à internet via la recherche web : utilise-la pour toute question qui bénéficie d'informations actuelles ou externes (actualités, définitions, faits vérifiables, adresses, horaires, etc.), et réponds directement de ta connaissance pour les questions simples. ${club ? `L'utilisateur consulte actuellement le club : ${club.name}.` : ''} ${board ? `État actuel de son tableau Kanban — À faire: ${board.todo.join(', ') || 'aucune'}; En cours: ${board.doing.join(', ') || 'aucune'}; Terminé: ${board.done.join(', ') || 'aucune'}.` : ''} Si on te demande d'ajouter, modifier ou organiser des tâches, propose une formulation claire que l'utilisateur peut ajouter lui-même via le bouton "+ Ajouter une carte".`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: systemContext,
+        messages: chatHistory,
+        tools: [{ type: "web_search_20250305", name: "web_search" }]
+      })
+    });
+
+    if(!response.ok){
+      throw new Error(`Erreur réseau (${response.status})`);
+    }
+
+    const data = await response.json();
+
+    // Detect whether a web search was actually performed, to show a helpful status
+    const usedSearch = (data.content || []).some(b => b.type === 'server_tool_use' && b.name === 'web_search');
+    if(usedSearch){
+      setBusy(true, 'Recherche sur internet...');
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+    const finalText = textBlocks.join('\n\n').trim() || "Je n'ai pas pu formuler de réponse, pouvez-vous reformuler votre question ?";
+
+    chatHistory.push({ role:'assistant', content: data.content });
+    setBusy(false);
+    addMsg('bot', finalText);
+
+  } catch(err){
+    setBusy(false);
+    addMsg('error', "Impossible de contacter l'assistant en ce moment. Vérifiez la connexion et réessayez.");
+    console.error(err);
+  }
 }
 
 aiSend.addEventListener('click', sendUserMsg);
