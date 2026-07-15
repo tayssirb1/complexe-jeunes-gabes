@@ -36,19 +36,8 @@ a{color:inherit;}
 /* ---------- Auth ---------- */
 #auth-screen{position:fixed;inset:0;display:flex;z-index:500;background:var(--teal-950);}
 .auth-visual{flex:1.1;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px;color:#EFEBDD;}
-.auth-orbs{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-.auth-orb{position:absolute;border-radius:50%;filter:blur(38px);will-change:transform;animation:orbFloat ease-in-out infinite;}
-.auth-orb.o1{width:260px;height:260px;left:-60px;top:60%;background:radial-gradient(circle,rgba(62,133,100,.55),transparent 70%);animation-duration:22s;}
-.auth-orb.o2{width:200px;height:200px;right:-40px;top:8%;background:radial-gradient(circle,rgba(201,151,60,.45),transparent 70%);animation-duration:26s;animation-delay:-4s;}
-.auth-orb.o3{width:170px;height:170px;left:30%;top:-40px;background:radial-gradient(circle,rgba(184,72,63,.30),transparent 70%);animation-duration:19s;animation-delay:-9s;}
-.auth-orb.o4{width:150px;height:150px;right:12%;bottom:-30px;background:radial-gradient(circle,rgba(62,133,100,.40),transparent 70%);animation-duration:24s;animation-delay:-14s;}
-@keyframes orbFloat{
-  0%{transform:translate(0,0) scale(1);}
-  33%{transform:translate(26px,-22px) scale(1.08);}
-  66%{transform:translate(-20px,16px) scale(.94);}
-  100%{transform:translate(0,0) scale(1);}
-}
-@media (prefers-reduced-motion:reduce){.auth-orb{animation:none;}}
+.auth-network{position:absolute;inset:0;z-index:0;display:block;}
+@media (prefers-reduced-motion:reduce){.auth-network{opacity:.9;}}
 .auth-visual::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(600px 400px at 15% 110%, rgba(62,133,100,.30), transparent 60%),
   radial-gradient(500px 350px at 90% -10%, rgba(201,151,60,.22), transparent 60%);}
@@ -226,12 +215,7 @@ a{color:inherit;}
 
 <div id="auth-screen">
   <div class="auth-visual">
-    <div class="auth-orbs">
-      <span class="auth-orb o1"></span>
-      <span class="auth-orb o2"></span>
-      <span class="auth-orb o3"></span>
-      <span class="auth-orb o4"></span>
-    </div>
+    <canvas id="auth-network" class="auth-network"></canvas>
     <div class="auth-brand">
       <svg width="30" height="30" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#D9AE5C" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
       <span class="auth-brand-name">Complexe Jeunes Gabes</span>
@@ -490,12 +474,118 @@ window.addEventListener('DOMContentLoaded', () => {
   renderAuthChips();
   renderClubGrid();
   renderClubSelectOptions();
+  initNetworkAnimation();
   setTimeout(() => {
     const boot = document.getElementById('boot');
     boot.style.opacity = '0';
     setTimeout(() => boot.style.display = 'none', 400);
   }, 1000);
 });
+
+// ---------------------------------------------------------------
+// Left-panel network animation (connected drifting dots)
+// ---------------------------------------------------------------
+function initNetworkAnimation(){
+  const canvas = document.getElementById('auth-network');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const wrap = canvas.parentElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let w = 0, h = 0, nodes = [];
+  const LINK_DIST = 150;
+  const NODE_COLOR = 'rgba(237,233,219,0.75)';
+
+  function countForArea(area){
+    return Math.max(18, Math.min(70, Math.round(area / 16000)));
+  }
+
+  function resize(){
+    w = wrap.clientWidth;
+    h = wrap.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const target = countForArea(w * h);
+    if(nodes.length === 0){
+      nodes = Array.from({length: target}, () => makeNode());
+    } else if(nodes.length < target){
+      while(nodes.length < target) nodes.push(makeNode());
+    } else if(nodes.length > target){
+      nodes.length = target;
+    }
+  }
+
+  function makeNode(){
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      r: Math.random() * 1.6 + 1.2
+    };
+  }
+
+  function step(){
+    for(const n of nodes){
+      n.x += n.vx;
+      n.y += n.vy;
+      if(n.x < 0 || n.x > w) n.vx *= -1;
+      if(n.y < 0 || n.y > h) n.vy *= -1;
+      n.x = Math.max(0, Math.min(w, n.x));
+      n.y = Math.max(0, Math.min(h, n.y));
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+
+    for(let i = 0; i < nodes.length; i++){
+      for(let j = i + 1; j < nodes.length; j++){
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < LINK_DIST){
+          ctx.strokeStyle = `rgba(237,233,219,${(1 - dist / LINK_DIST) * 0.22})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for(const n of nodes){
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = NODE_COLOR;
+      ctx.fill();
+    }
+  }
+
+  function loop(){
+    step();
+    draw();
+    if(!reduceMotion) requestAnimationFrame(loop);
+  }
+
+  resize();
+  draw();
+  if(!reduceMotion){
+    requestAnimationFrame(loop);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { resize(); draw(); }, 150);
+  });
+}
 
 function renderAuthChips(){
   const wrap = document.getElementById('auth-club-chips');
