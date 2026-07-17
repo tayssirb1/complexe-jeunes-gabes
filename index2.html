@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>Complexe Jeunes Gabes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal-950:#0B2626; --teal-900:#0E2F2F; --teal-800:#123B3B; --teal-700:#175050;
+  --sand-500:#C9973C; --sand-400:#D9AE5C; --palm-500:#3E8564; --palm-600:#2F6E51;
+  --bg:#F6F5EF; --surface:#FFFFFF; --line:#E6E3D8; --ink:#182420; --ink-soft:#5B6864;
+  --danger:#B8483F; --radius:14px;
+  --shadow-sm:0 1px 2px rgba(14,47,47,.06), 0 1px 1px rgba(14,47,47,.04);
+  --shadow-md:0 8px 24px rgba(14,47,47,.10);
+  --shadow-lg:0 18px 48px rgba(14,47,47,.16);
+  --font-display:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input,textarea,select{font-family:inherit;font-size:14px;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:#D8D4C4;border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+a{color:inherit;}
+
+#boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--teal-950);z-index:9999;transition: opacity 0.4s ease;}
+.boot-mark{display:flex;flex-direction:column;align-items:center;gap:14px;color:#EDE9DB;}
+.boot-mark svg{animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.55;transform:scale(1);}50%{opacity:1;transform:scale(1.05);}}
+.boot-mark span{font-family:var(--font-display);font-weight:600;letter-spacing:.02em;font-size:13px;color:#B7CFC7;}
+
+/* ---------- Auth ---------- */
+#auth-screen{position:fixed;inset:0;display:flex;z-index:500;background:var(--teal-950);}
+.auth-visual{flex:1.1;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px;color:#EFEBDD;}
+.auth-network{position:absolute;inset:0;z-index:0;display:block;}
+@media (prefers-reduced-motion:reduce){.auth-network{opacity:.9;}}
+.auth-visual::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(600px 400px at 15% 110%, rgba(62,133,100,.30), transparent 60%),
+  radial-gradient(500px 350px at 90% -10%, rgba(201,151,60,.22), transparent 60%);}
+.auth-brand{position:relative;z-index:2;display:flex;align-items:center;gap:12px;pointer-events:none;}
+.auth-brand-name{font-family:var(--font-display);font-size:20px;font-weight:700;}
+.auth-hero{position:relative;z-index:2;max-width:460px;pointer-events:none;}
+.auth-hero h1{font-family:var(--font-display);font-size:38px;line-height:1.14;font-weight:700;margin-bottom:14px;}
+.auth-hero p{color:#B7CFC7;font-size:14.5px;line-height:1.6;margin-bottom:16px;}
+.auth-clubs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;pointer-events:none;}
+.auth-club-chip{font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display: flex;align-items: center;gap: 6px;}
+.auth-foot{position:relative;z-index:2;font-size:11.5px;color:#7FA79A;font-family:var(--font-mono);pointer-events:none;}
+
+.auth-panel{width:440px;flex-shrink:0;background:var(--bg);display:flex;flex-direction:column;justify-content:center;padding:48px;overflow-y:auto;}
+.auth-panel-inner{width:100%;max-width:340px;margin:0 auto;}
+.auth-tabs{display:flex;gap:4px;background:#EDEADD;padding:4px;border-radius:10px;margin-bottom:24px;}
+.auth-tab{flex:1;text-align:center;padding:9px;border-radius:7px;font-weight:600;font-size:13.5px;color:var(--ink-soft);transition:.15s;cursor:pointer;}
+.auth-tab.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);}
+.auth-panel h2{font-family:var(--font-display);font-size:21px;margin-bottom:5px;}
+.auth-panel .sub{color:var(--ink-soft);font-size:13px;margin-bottom:20px;}
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+.field input,.field select{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);font-size:14px;transition:.15s;}
+.field input:focus,.field select:focus{outline:none;border-color:var(--palm-500);box-shadow:0 0 0 3px rgba(62,133,100,.14);}
+.btn-primary{width:100%;padding:12px;background:var(--teal-900);color:#fff;border-radius:9px;font-weight:600;font-size:14px;transition:.15s;margin-top:6px;}
+.btn-primary:hover{background:var(--teal-800);}
+.btn-primary:disabled{opacity:.5;cursor:default;}
+.btn-ghost{padding:10px 16px;border-radius:9px;font-weight:600;font-size:13px;color:var(--ink-soft);background:rgba(0,0,0,.04);transition:.15s;}
+.btn-ghost:hover{background:rgba(0,0,0,.08);color:var(--ink);}
+.auth-error{background:#F7E7E4;color:var(--danger);border:1px solid rgba(184,72,63,.2);border-radius:9px;padding:10px 12px;font-size:12.5px;margin-bottom:14px;line-height:1.5;}
+
+/* ---------- Club selection ---------- */
+#club-screen{position:fixed;inset:0;z-index:480;background:var(--bg);display:none;flex-direction:column;align-items:center;padding:56px 20px;overflow-y:auto;}
+#club-screen.show{display:flex;}
+.club-select-head{max-width:640px;text-align:center;margin-bottom:34px;}
+.club-select-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.09em;color:var(--palm-600);text-transform:uppercase;margin-bottom:10px;}
+.club-select-head h1{font-family:var(--font-display);font-size:28px;margin-bottom:8px;}
+.club-select-head p{color:var(--ink-soft);font-size:14px;}
+.club-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;width:100%;max-width:900px;margin-bottom:30px;}
+.club-tile{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:20px;text-align:left;transition:.15s;position:relative;overflow:hidden;}
+.club-tile:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--palm-500);}
+.club-tile.selected{border-color:var(--palm-500);box-shadow:0 0 0 3px rgba(62,133,100,.14);}
+.club-tile-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#fff;}
+.club-tile h3{font-family:var(--font-display);font-size:15.5px;margin-bottom:5px;}
+.club-tile p{font-size:12.3px;color:var(--ink-soft);line-height:1.5;}
+.club-tile .check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.15s;color:transparent;}
+.club-tile.selected .check{background:var(--palm-500);border-color:var(--palm-500);color:#fff;}
+.club-select-actions{display:flex;gap:10px;}
+
+/* ---------- App shell ---------- */
+#app{display:none;height:100vh;position:relative;}
+#app.ready{display:flex;}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(11,38,38,.45);z-index:399;}
+.sidebar-backdrop.show{display:block;}
+.sidebar{width:260px;flex-shrink:0;background:var(--teal-950);color:#DDEDE7;display:flex;flex-direction:column;}
+.sidebar-header{padding:20px 18px 14px;display:flex;align-items:center;gap:10px;}
+.sidebar-header .name{font-family:var(--font-display);font-weight:700;font-size:15px;line-height:1.2;color:#F3F0E2;}
+.sidebar-header .sub{font-size:10px;color:#7FA79A;font-family:var(--font-mono);letter-spacing:.03em;}
+.nav-scroll{flex:1;overflow-y:auto;padding-bottom:10px;}
+.club-switch{margin:0 12px 6px;padding:10px 11px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;gap:9px;transition:.15s;}
+.club-switch:hover{background:rgba(255,255,255,.11);}
+.club-switch-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.club-switch-text{flex:1;min-width:0;}
+.club-switch-text b{display:block;font-size:12.5px;color:#F3F0E2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.club-switch-text span{font-size:10px;color:#7FA79A;}
+.sidebar-nav{padding:6px 12px;}
+.nav-section-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5E8579;font-weight:700;padding:12px 10px 6px;display:flex;justify-content:space-between;align-items:center;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13.3px;color:#C6DDD5;cursor:pointer;transition:.12s;margin-bottom:1px;}
+.nav-item:hover{background:rgba(255,255,255,.06);}
+.nav-item.active{background:var(--teal-800);color:#fff;font-weight:600;box-shadow:inset 2px 0 0 var(--sand-400);}
+.nav-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:inherit;}
+
+.presence-row{display:flex;align-items:center;gap:8px;padding:5px 10px;}
+.presence-label{font-size:11.3px;color:#8FB6AA;}
+.presence-dot{width:7px;height:7px;border-radius:50%;background:#5FD79A;box-shadow:0 0 0 2px rgba(95,215,154,.25);flex-shrink:0;}
+
+.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;}
+.avatar{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;font-family:var(--font-display);background: var(--palm-500);}
+.user-meta{flex:1;min-width:0;}
+.user-meta .un{font-size:13px;font-weight:600;color:#F3F0E2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-meta .ue{font-size:10.5px;color:#7FA79A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.logout-btn{color:#9FC2B7;padding:6px;border-radius:6px;flex-shrink:0;}
+.logout-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);}
+.topbar{height:60px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:var(--surface);gap:14px;}
+.topbar-left{display:flex;align-items:center;min-width:0;gap:12px;}
+.menu-btn{display:none;width:34px;height:34px;border-radius:8px;align-items:center;justify-content:center;color:var(--ink-soft);flex-shrink:0;}
+.menu-btn:hover{background:rgba(0,0,0,.05);}
+.topbar-title{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:16.5px;white-space:nowrap;}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.search-box{display:flex;align-items:center;gap:8px;background:#F2F0E6;border-radius:9px;padding:8px 12px;width:220px;color:var(--ink-soft);}
+.search-box input{background:transparent;border:none;flex:1;font-size:13px;color:var(--ink);}
+.search-box input:focus{outline:none;}
+
+.view{flex:1;overflow:hidden;display:none;}
+.view.active{display:flex;}
+
+/* ---------- Dashboard ---------- */
+#dashboard-view{overflow-y:auto;padding:28px 32px;flex-direction:column;}
+.dash-welcome{margin-bottom:22px;}
+.dash-welcome h1{font-family:var(--font-display);font-size:24px;margin-bottom:4px;}
+.dash-welcome p{color:var(--ink-soft);font-size:13.5px;}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+.dash-card{background:var(--surface);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);border:1px solid var(--line);cursor:pointer;transition:.15s;}
+.dash-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.dash-card .top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.dash-card .top h3{font-family:var(--font-display);font-size:15px;}
+.dash-stats{display:flex;gap:14px;font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+.dash-stats b{color:var(--ink);font-family:var(--font-display);font-size:14px;}
+
+.dash-section-title{font-family:var(--font-display);font-size:16px;margin-bottom:14px;color:var(--ink);}
+.dash-recent{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;}
+.dash-recent-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;}
+.dash-recent-row:last-child{border-bottom:none;}
+.dash-recent-row .badge{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+.badge-todo{background:#EFEDE2;color:var(--ink-soft);}
+.badge-doing{background:#FBEDD3;color:#8A6A1F;}
+.badge-done{background:#E2EFE5;color:var(--palm-600);}
+.dash-recent-row .title{flex:1;min-width:0;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dash-recent-row .meta{font-size:11px;color:var(--ink-soft);font-family:var(--font-mono);flex-shrink:0;}
+.dash-empty{padding:28px 16px;text-align:center;color:var(--ink-soft);font-size:13px;}
+
+/* ---------- Kanban Board (Discord-style) ---------- */
+#board-view{padding:16px 16px;overflow-x:auto;gap:12px;align-items:flex-start;background:#2B2D31;}
+.list-col{width:300px;flex-shrink:0;background:#313338;border-radius:8px;display:flex;flex-direction:column;max-height:calc(100vh - 120px);padding:0;}
+.list-col-head{padding:12px 12px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04);}
+.list-col-head h3{font-size:12px;font-weight:700;font-family:var(--font-display);text-transform:uppercase;letter-spacing:.06em;color:#949BA4;display:flex;align-items:center;gap:7px;}
+.list-col-head .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.status-dot.todo{background:#F0B232;}
+.status-dot.doing{background:#5865F2;}
+.status-dot.done{background:#23A55A;}
+.list-count{font-size:11px;color:#949BA4;background:rgba(255,255,255,.06);padding:1px 7px;border-radius:10px;font-family:var(--font-mono);font-weight:600;}
+.list-cards{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:40px;}
+.list-cards::-webkit-scrollbar{width:6px;}
+.list-cards::-webkit-scrollbar-thumb{background:#1E1F22;border-radius:6px;}
+.card{background:#2B2D31;border-radius:6px;padding:10px 12px;transition:.1s;position:relative;border:none;cursor:grab;}
+.card:hover{background:#35373C;}
+.card.dragging{opacity:.4;}
+.card .ctitle{font-size:14px;font-weight:500;line-height:1.4;color:#DBDEE1;margin-bottom:8px;padding-right:24px;word-break:break-word;}
+.card .card-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.card .status-pill{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.1s;border:none;color:#fff;}
+.status-pill.todo{background:#F0B232;color:#1E1F22;}
+.status-pill.doing{background:#5865F2;}
+.status-pill.done{background:#23A55A;}
+.status-pill:hover{filter:brightness(1.12);}
+.status-pill .chev{display:inline-flex;}
+.card .card-delete{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#949BA4;opacity:0;transition:.1s;}
+.card:hover .card-delete{opacity:1;}
+.card .card-delete:hover{background:#F23F42;color:#fff;}
+.list-cards.drag-over{background:#5865F2;background:rgba(88,101,242,.12);outline:2px dashed #5865F2;outline-offset:-4px;border-radius:6px;}
+.add-card-btn{margin:0 8px 8px;padding:8px 10px;border-radius:5px;font-size:13px;color:#949BA4;text-align:left;transition:.1s;display:flex;align-items:center;gap:6px;font-weight:500;background:transparent;width:calc(100% - 16px);}
+.add-card-btn:hover{background:#35373C;color:#DBDEE1;}
+.add-card-form{margin:8px;display:flex;flex-direction:column;gap:6px;}
+.add-card-form input{width:100%;padding:9px 11px;border:1.5px solid #5865F2;border-radius:5px;background:#1E1F22;font-size:13px;color:#DBDEE1;}
+.add-card-form input::placeholder{color:#949BA4;}
+.add-card-form input:focus{outline:none;box-shadow:0 0 0 3px rgba(88,101,242,.2);}
+.add-card-form .row{display:flex;gap:6px;}
+.add-card-form .row button{padding:7px 12px;border-radius:5px;font-size:12.5px;font-weight:600;border:none;}
+.add-card-form .save{background:#5865F2;color:#fff;}
+.add-card-form .save:hover{background:#4752C4;}
+.add-card-form .cancel{color:#949BA4;background:rgba(255,255,255,.06);}
+.add-card-form .cancel:hover{background:rgba(255,255,255,.12);color:#DBDEE1;}
+
+/* Status dropdown menu */
+.status-menu{position:fixed;z-index:700;background:#111214;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.5);padding:6px;min-width:160px;display:none;flex-direction:column;gap:2px;border:1px solid #1E1F22;}
+.status-menu.show{display:flex;}
+.status-menu-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;font-size:13px;color:#DBDEE1;cursor:pointer;transition:.1s;border:none;background:none;width:100%;text-align:left;font-family:inherit;}
+.status-menu-item:hover{background:#5865F2;}
+.status-menu-item .mi-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.status-menu-item.current{background:rgba(88,101,242,.18);}
+.status-menu-item.current .mi-check{margin-left:auto;color:#5865F2;display:inline-flex;}
+.status-menu-item .mi-check{display:none;}
+
+/* ---------- AI Assistant Panel ---------- */
+.ai-fab{position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--teal-900);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(14,47,47,.35);z-index:600;transition:.2s;}
+.ai-fab:hover{transform:scale(1.06);background:var(--teal-800);}
+.ai-fab .ring{position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--sand-400);opacity:.6;animation:ripple 2.6s ease-out infinite;}
+@keyframes ripple{0%{transform:scale(.85);opacity:.7;}100%{transform:scale(1.35);opacity:0;}}
+.ai-panel{position:fixed;bottom:98px;right:26px;width:390px;height:560px;background:var(--surface);border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.3);z-index:600;display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line);}
+.ai-panel.show{display:flex;}
+.ai-head{background:var(--teal-950);color:#EDE9DB;padding:16px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ai-head-text b{font-family:var(--font-display);font-size:14.5px;display:block;}
+.ai-head-text span{font-size:10.8px;color:#8FB6AA;}
+.ai-close{margin-left:auto;color:#B7CFC7;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.ai-close:hover{background:rgba(255,255,255,.1);color:#fff;}
+.ai-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.ai-msg{max-width:88%;font-size:13.3px;line-height:1.55;padding:9px 13px;border-radius:12px;white-space:pre-wrap;word-break:break-word;}
+.ai-msg.user{align-self:flex-end;background:var(--teal-900);color:#fff;border-bottom-right-radius:4px;}
+.ai-msg.bot{align-self:flex-start;background:#EFEDE2;color:var(--ink);border-bottom-left-radius:4px;}
+.ai-msg.error{align-self:center;background:#F7E7E4;color:var(--danger);font-size:12px;text-align:center;}
+.ai-status{align-self:flex-start;display:none;gap:7px;align-items:center;padding:9px 13px;background:#EFEDE2;border-radius:12px;border-bottom-left-radius:4px;font-size:12px;color:var(--ink-soft);}
+.ai-status.show{display:flex;}
+.ai-status .dots{display:flex;gap:4px;}
+.ai-status .dots span{width:5px;height:5px;border-radius:50%;background:#9AA69E;animation:blink 1.2s infinite;}
+.ai-status .dots span:nth-child(2){animation-delay:.2s;}
+.ai-status .dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.3;}40%{opacity:1;}}
+.ai-composer{border-top:1px solid var(--line);padding:10px;display:flex;gap:8px;flex-shrink:0;}
+.ai-composer input{flex:1;border:1.5px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.3px;}
+.ai-composer input:focus{outline:none;border-color:var(--palm-500);}
+.ai-composer input:disabled{opacity:.6;}
+.ai-send{width:38px;height:38px;background:var(--teal-900);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
+.ai-send:disabled{opacity:.5;cursor:default;}
+
+@media (max-width:900px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:400;transform:translateX(-100%);transition:.22s ease;box-shadow:0 0 40px rgba(0,0,0,.3);}
+  .sidebar.open{transform:translateX(0);}
+  .menu-btn{display:flex;}
+  .auth-visual{display:none;}
+  .auth-panel{width:100%;padding:30px 20px;}
+  .search-box{display:none;}
+  .ai-panel{width:calc(100vw - 24px);right:12px;left:12px;height:72vh;bottom:90px;}
+  .ai-fab{bottom:20px;right:20px;}
+  .club-select-head h1{font-size:22px;}
+  #club-screen{padding:36px 16px;}
+}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="boot-mark">
+    <svg width="46" height="46" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#3E8564" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>COMPLEXE JEUNES GABES</span>
+  </div>
+</div>
+
+<div id="auth-screen">
+  <div class="auth-visual">
+    <canvas id="auth-network" class="auth-network"></canvas>
+    <div class="auth-brand">
+      <svg width="30" height="30" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#D9AE5C" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="auth-brand-name">Complexe Jeunes Gabes</span>
+    </div>
+    <div class="auth-hero">
+      <h1>L'espace de travail de vos clubs, sous un même toit.</h1>
+      <p>Rejoignez votre club, suivez vos tâches, discutez avec les membres et retrouvez tout le monde connecté au même endroit.</p>
+      <div class="auth-clubs" id="auth-club-chips"></div>
+    </div>
+    <div class="auth-foot">GABES · TUNISIA</div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-panel-inner">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-btn-login">Connexion</div>
+        <div class="auth-tab" id="tab-btn-signup">Créer un compte</div>
+      </div>
+      <div id="form-container">
+        <h2>Content de vous revoir</h2>
+        <div class="sub">Connectez-vous à votre espace de travail.</div>
+        <div class="auth-error" id="auth-error" style="display:none;"></div>
+        <div class="field" id="field-username" style="display:none;">
+          <label>Nom d'utilisateur</label>
+          <input type="text" id="auth-username" placeholder="ex. mohamed_ben">
+        </div>
+        <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="vous@exemple.com"></div>
+        <div class="field"><label>Mot de passe</label><input type="password" id="auth-password" placeholder="••••••••"></div>
+        <div class="field" id="field-club" style="display:none;">
+          <label>Votre club</label>
+          <select id="auth-club-select">
+            <option value="">Sélectionnez un club...</option>
+          </select>
+        </div>
+        <button class="btn-primary" id="submit-auth-btn">Se connecter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="club-screen">
+  <div class="club-select-head">
+    <div class="club-select-eyebrow">Étape 2 sur 2</div>
+    <h1>Choisissez votre club</h1>
+    <p>Sélectionnez le club auquel vous voulez accéder. Vous pourrez en changer à tout moment depuis la barre latérale.</p>
+  </div>
+  <div class="club-grid" id="club-grid"></div>
+  <div class="club-select-actions">
+    <button class="btn-primary" id="enter-club-btn" style="width:auto;padding:12px 28px;" disabled>Entrer dans l'espace</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <svg width="28" height="28" viewBox="0 0 46 46" fill="none"><circle cx="23" cy="23" r="21" stroke="#D9AE5C" stroke-width="2"/><path d="M23 8v30M12 15c4 4 4 8 0 12M34 15c-4 4-4 8 0 12" stroke="#D9AE5C" stroke-width="2" stroke-linecap="round"/></svg>
+      <div><div class="name">Complexe Jeunes</div><div class="sub">WORKSPACE</div></div>
+    </div>
+    <div class="nav-scroll">
+      <div class="club-switch" id="club-switch-btn">
+        <div class="club-switch-icon" id="club-switch-icon"></div>
+        <div class="club-switch-text"><b id="club-switch-name">Choisir un club</b><span>Changer de club</span></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7FA79A" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" id="nav-dash-btn">
+          <div class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <span>Tableau de bord</span>
+        </div>
+        <div class="nav-item" id="nav-board-btn">
+          <div class="nav-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></div>
+          <span>Gestion du Club</span>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-label"><span>Statut</span></div>
+        <div class="presence-row"><span class="presence-dot"></span><span class="presence-label">Equipe Connectée</span></div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="avatar" id="user-avatar">U</div>
+      <div class="user-meta"><div class="un" id="user-display-name">Membre</div><div class="ue" id="user-display-email">membre@complexe.tn</div></div>
+      <button class="logout-btn" id="logout-btn" title="Se déconnecter">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" id="menu-toggle-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-title"><span id="view-title">Tableau de bord</span></div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-input" placeholder="Rechercher...">
+        </div>
+      </div>
+    </div>
+
+    <div id="dashboard-view" class="view active">
+      <div class="dash-welcome">
+        <h1 id="welcome-text">Bienvenue</h1>
+        <p id="dash-sub">Voici un aperçu de l'activité de votre club.</p>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="top"><h3>Cartes actives</h3></div>
+          <div class="dash-stats"><b id="stat-active">0</b> à faire + en cours</div>
+        </div>
+        <div class="dash-card">
+          <div class="top"><h3>Terminées</h3></div>
+          <div class="dash-stats"><b id="stat-done">0</b> tâches complétées</div>
+        </div>
+        <div class="dash-card" id="switch-club-card">
+          <div class="top"><h3>Changer de club</h3></div>
+          <div class="dash-stats">Cliquez pour rejoindre un autre club</div>
+        </div>
+      </div>
+      <div class="dash-section-title">Activité récente</div>
+      <div class="dash-recent" id="dash-recent"></div>
+    </div>
+
+    <div id="board-view" class="view">
+      <div class="list-col" data-status="todo">
+        <div class="list-col-head"><h3><span class="status-dot todo"></span>À Faire</h3><span class="list-count" id="count-todo">0</span></div>
+        <div class="list-cards" id="cards-todo"></div>
+        <button class="add-card-btn" data-add="todo">+ Ajouter une carte</button>
+      </div>
+      <div class="list-col" data-status="doing">
+        <div class="list-col-head"><h3><span class="status-dot doing"></span>En Cours</h3><span class="list-count" id="count-doing">0</span></div>
+        <div class="list-cards" id="cards-doing"></div>
+        <button class="add-card-btn" data-add="doing">+ Ajouter une carte</button>
+      </div>
+      <div class="list-col" data-status="done">
+        <div class="list-col-head"><h3><span class="status-dot done"></span>Terminé</h3><span class="list-count" id="count-done">0</span></div>
+        <div class="list-cards" id="cards-done"></div>
+        <button class="add-card-btn" data-add="done">+ Ajouter une carte</button>
+      </div>
+    </div>
+    <div class="status-menu" id="status-menu"></div>
+  </div>
+</div>
+
+<button class="ai-fab" id="open-ai-btn">
+  <div class="ring"></div>
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-head">
+    <div class="ai-head-text"><b>Assistant Intelligent</b><span>Réponses locales · hors connexion</span></div>
+    <button class="ai-close" id="close-ai-btn">✕</button>
+  </div>
+  <div class="ai-body" id="ai-chat-body">
+    <div class="ai-msg bot">Bonjour ! Je suis l'assistant du Complexe Jeunes Gabès. Posez-moi une question sur le complexe, les clubs, ou demandez-moi une idée de tâche pour votre tableau.</div>
+    <div class="ai-status" id="ai-status"><div class="dots"><span></span><span></span><span></span></div><span id="ai-status-text">Réflexion en cours...</span></div>
+  </div>
+  <div class="ai-composer">
+    <input type="text" id="ai-input" placeholder="Posez votre question ici...">
+    <button class="ai-send" id="ai-send-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Complexe Jeunes Gabès — static single-file app
+// No database. All data lives in localStorage.
+// ============================================================
+
+const CLUBS = [
+  { id:'cyclisme', name:'Club Cyclisme', nameAr:'ناد الدراجات', color:'#3E8564',
+    desc:"Sorties, entretien vélo et compétitions régionales.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>` },
+  { id:'echecs', name:'Club Échecs', nameAr:'ناد الشطرنج', color:'#175050',
+    desc:"Tournois hebdomadaires, ouvertures et analyse de parties.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>` },
+  { id:'devweb', name:'Développement Web', nameAr:'', color:'#C9973C',
+    desc:"Ateliers de code, projets collectifs et mentorat technique.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>` },
+  { id:'musique', name:'Club Musique', nameAr:'', color:'#B8483F',
+    desc:"Répétitions, jam sessions et petits concerts du complexe.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>` },
+  { id:'photo', name:'Club Photographie', nameAr:'', color:'#5B6864',
+    desc:"Sorties photo, retouche et exposition annuelle.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>` },
+  { id:'theatre', name:"Club Théâtre", nameAr:'', color:'#7A5C8E',
+    desc:"Improvisation, mise en scène et pièces de fin d'année.",
+    icon:`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="1.6"/><circle cx="15" cy="9" r="1.6"/><path d="M8 15c1 1.4 2.4 2 4 2s3-.6 4-2"/><circle cx="12" cy="12" r="10"/></svg>` },
+];
+
+const DEFAULT_BOARDS = {
+  cyclisme: { todo:['Réserver la salle omnisports', "Planifier la sortie du samedi"], doing:['Entretien des vélos communs'], done:['Validation du budget annuel'] },
+  echecs:   { todo:['Préparer le tournoi mensuel'], doing:['Analyse des parties de la semaine'], done:['Achat de 3 nouveaux échiquiers'] },
+  devweb:   { todo:['Lancer les inscriptions du club informatique'], doing:['Création de la charte graphique du site'], done:['Mise en place du dépôt Git'] },
+  musique:  { todo:['Réserver la salle de répétition'], doing:['Préparer le set du concert'], done:[] },
+  photo:    { todo:['Organiser la sortie photo côtière'], doing:[], done:['Sélection des photos pour l\'exposition'] },
+  theatre:  { todo:['Distribuer les rôles de la pièce'], doing:['Répétitions du deuxième acte'], done:[] },
+};
+
+const STORAGE_KEY = 'cjg_workspace_v1';
+const SESSION_KEY = 'cjg_session_v1';
+
+let state = loadState();
+let selectedClubId = state.lastClubId || null;
+let pendingClubId = null;
+let currentMode = 'login';
+let currentView = 'dash';
+let dragCardId = null;
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed.boards) return parsed;
+    }
+  } catch(e){}
+  // First run: seed with defaults
+  const boards = {};
+  CLUBS.forEach(c => {
+    boards[c.id] = JSON.parse(JSON.stringify(DEFAULT_BOARDS[c.id] || { todo:[], doing:[], done:[] }));
+  });
+  const fresh = { boards, lastClubId: null };
+  saveState(fresh);
+  return fresh;
+}
+
+function saveState(s){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){}
+}
+
+function loadSession(){
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  return null;
+}
+
+function saveSession(s){
+  try {
+    if(s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+    else localStorage.removeItem(SESSION_KEY);
+  } catch(e){}
+}
+
+function clubById(id){ return CLUBS.find(c => c.id === id); }
+
+// ============================================================
+// Boot
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  restoreSession();
+  renderAuthChips();
+  renderClubGrid();
+  renderClubSelectOptions();
+  initNetworkAnimation();
+  bindEvents();
+  setTimeout(() => {
+    const boot = document.getElementById('boot');
+    boot.style.opacity = '0';
+    setTimeout(() => boot.style.display = 'none', 400);
+  }, 900);
+});
+
+function restoreSession(){
+  const session = loadSession();
+  if(session && session.clubId && clubById(session.clubId)){
+    selectedClubId = session.clubId;
+    document.getElementById('user-display-name').innerText = session.displayName || 'Membre';
+    document.getElementById('user-display-email').innerText = session.email || '';
+    document.getElementById('user-avatar').innerText = (session.displayName || 'M').charAt(0).toUpperCase();
+    document.getElementById('auth-screen').style.display = 'none';
+    enterClub(selectedClubId, true);
+  }
+}
+
+// ============================================================
+// Network animation
+// ============================================================
+function initNetworkAnimation(){
+  const canvas = document.getElementById('auth-network');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const wrap = canvas.parentElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let w = 0, h = 0, nodes = [];
+  const LINK_DIST = 150;
+  const NODE_COLOR = 'rgba(237,233,219,0.75)';
+
+  function countForArea(area){ return Math.max(18, Math.min(70, Math.round(area / 16000))); }
+
+  function makeNode(){
+    return {
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+      r: Math.random() * 1.6 + 1.2
+    };
+  }
+
+  function resize(){
+    w = wrap.clientWidth; h = wrap.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const target = countForArea(w * h);
+    if(nodes.length === 0){ nodes = Array.from({length: target}, makeNode); }
+    else if(nodes.length < target){ while(nodes.length < target) nodes.push(makeNode()); }
+    else if(nodes.length > target){ nodes.length = target; }
+  }
+
+  function step(){
+    for(const n of nodes){
+      n.x += n.vx; n.y += n.vy;
+      if(n.x < 0 || n.x > w) n.vx *= -1;
+      if(n.y < 0 || n.y > h) n.vy *= -1;
+      n.x = Math.max(0, Math.min(w, n.x));
+      n.y = Math.max(0, Math.min(h, n.y));
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    for(let i = 0; i < nodes.length; i++){
+      for(let j = i + 1; j < nodes.length; j++){
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < LINK_DIST){
+          ctx.strokeStyle = `rgba(237,233,219,${(1 - dist / LINK_DIST) * 0.22})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+    }
+    for(const n of nodes){
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = NODE_COLOR; ctx.fill();
+    }
+  }
+
+  function loop(){ step(); draw(); if(!reduceMotion) requestAnimationFrame(loop); }
+
+  resize(); draw();
+  if(!reduceMotion) requestAnimationFrame(loop);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { resize(); draw(); }, 150);
+  });
+}
+
+function renderAuthChips(){
+  const wrap = document.getElementById('auth-club-chips');
+  wrap.innerHTML = CLUBS.slice(0,3).map(c => `
+    <span class="auth-club-chip">
+      <div class="nav-icon">${c.icon}</div>
+      ${c.nameAr || c.name}
+    </span>`).join('');
+}
+
+function renderClubSelectOptions(){
+  const sel = document.getElementById('auth-club-select');
+  CLUBS.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.innerText = c.name + (c.nameAr ? ' · ' + c.nameAr : '');
+    sel.appendChild(opt);
+  });
+}
+
+function showAuthError(msg){
+  const el = document.getElementById('auth-error');
+  if(!msg){ el.style.display = 'none'; el.innerText = ''; return; }
+  el.style.display = 'block';
+  el.innerText = msg;
+}
+
+// ============================================================
+// Auth tabs + submit (local-only)
+// ============================================================
+function bindEvents(){
+  document.getElementById('tab-btn-login').addEventListener('click', () => switchAuthMode('login'));
+  document.getElementById('tab-btn-signup').addEventListener('click', () => switchAuthMode('signup'));
+  document.getElementById('submit-auth-btn').addEventListener('click', submitAuth);
+  document.getElementById('auth-password').addEventListener('keydown', e => { if(e.key === 'Enter') submitAuth(); });
+
+  document.getElementById('enter-club-btn').addEventListener('click', () => {
+    if(pendingClubId) enterClub(pendingClubId);
+  });
+  document.getElementById('club-switch-btn').addEventListener('click', openClubSwitcher);
+  document.getElementById('switch-club-card').addEventListener('click', openClubSwitcher);
+  document.getElementById('logout-btn').addEventListener('click', logout);
+
+  document.getElementById('nav-dash-btn').addEventListener('click', () => goToView('dash'));
+  document.getElementById('nav-board-btn').addEventListener('click', () => goToView('board'));
+
+  document.getElementById('menu-toggle-btn').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebar-backdrop').classList.add('show');
+  });
+  document.getElementById('sidebar-backdrop').addEventListener('click', closeSidebarMobile);
+
+  document.querySelectorAll('.add-card-btn').forEach(btn => {
+    btn.addEventListener('click', () => openAddCardForm(btn.dataset.add));
+  });
+
+  document.getElementById('search-input').addEventListener('input', e => {
+    renderKanban(e.target.value);
+    renderDashboard(e.target.value);
+  });
+
+  // AI
+  document.getElementById('open-ai-btn').addEventListener('click', () => {
+    document.getElementById('ai-panel').classList.add('show');
+    document.getElementById('ai-input').focus();
+  });
+  document.getElementById('close-ai-btn').addEventListener('click', () => {
+    document.getElementById('ai-panel').classList.remove('show');
+  });
+  document.getElementById('ai-send-btn').addEventListener('click', sendAIMessage);
+  document.getElementById('ai-input').addEventListener('keydown', e => { if(e.key === 'Enter') sendAIMessage(); });
+}
+
+function switchAuthMode(mode){
+  currentMode = mode;
+  const isSignup = mode === 'signup';
+  document.getElementById('tab-btn-login').classList.toggle('active', !isSignup);
+  document.getElementById('tab-btn-signup').classList.toggle('active', isSignup);
+  document.querySelector('.auth-panel h2').innerText = isSignup ? 'Rejoindre un club' : 'Content de vous revoir';
+  document.querySelector('.auth-panel .sub').innerText = isSignup
+    ? 'Créez votre compte et choisissez votre club dès maintenant.'
+    : 'Connectez-vous à votre espace de travail.';
+  document.getElementById('submit-auth-btn').innerText = isSignup ? 'Créer mon compte' : 'Se connecter';
+  document.getElementById('field-username').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('field-club').style.display = isSignup ? 'block' : 'none';
+  showAuthError(null);
+}
+
+function submitAuth(){
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if(!email || !password){ showAuthError("Merci d'indiquer votre email et votre mot de passe."); return; }
+  if(password.length < 4){ showAuthError('Le mot de passe doit contenir au moins 4 caractères.'); return; }
+
+  let displayName = email.split('@')[0];
+  let clubChoice = null;
+
+  if(currentMode === 'signup'){
+    const username = document.getElementById('auth-username').value.trim();
+    clubChoice = document.getElementById('auth-club-select').value;
+    if(!username){ showAuthError("Merci d'indiquer un nom d'utilisateur."); return; }
+    if(!clubChoice){ showAuthError('Merci de sélectionner votre club.'); return; }
+    displayName = username;
+  }
+
+  showAuthError(null);
+  document.getElementById('user-display-name').innerText = displayName;
+  document.getElementById('user-display-email').innerText = email;
+  document.getElementById('user-avatar').innerText = displayName.charAt(0).toUpperCase();
+
+  saveSession({ displayName, email, clubId: clubChoice });
+
+  document.getElementById('auth-screen').style.display = 'none';
+
+  if(clubChoice){
+    enterClub(clubChoice);
+  } else {
+    document.getElementById('club-screen').classList.add('show');
+  }
+}
+
+// ============================================================
+// Club selection
+// ============================================================
+function renderClubGrid(){
+  const grid = document.getElementById('club-grid');
+  grid.innerHTML = CLUBS.map(c => `
+    <button class="club-tile" data-club="${c.id}">
+      <div class="check">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="club-tile-icon" style="background:${c.color}">${c.icon}</div>
+      <h3>${c.name}${c.nameAr ? ' · ' + c.nameAr : ''}</h3>
+      <p>${c.desc}</p>
+    </button>`).join('');
+
+  grid.querySelectorAll('.club-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      grid.querySelectorAll('.club-tile').forEach(t => t.classList.remove('selected'));
+      tile.classList.add('selected');
+      pendingClubId = tile.dataset.club;
+      document.getElementById('enter-club-btn').disabled = false;
+    });
+  });
+}
+
+function enterClub(clubId, silent){
+  selectedClubId = clubId;
+  state.lastClubId = clubId;
+  saveState(state);
+
+  const session = loadSession() || {};
+  session.clubId = clubId;
+  saveSession(session);
+
+  const club = clubById(clubId);
+  if(!club) return;
+
+  document.getElementById('club-switch-icon').style.background = club.color;
+  document.getElementById('club-switch-icon').innerHTML = club.icon;
+  document.getElementById('club-switch-name').innerText = club.name;
+  const shownName = document.getElementById('user-display-name').innerText || 'Membre';
+  document.getElementById('welcome-text').innerText = `Ravi de vous voir, ${shownName}`;
+  document.getElementById('dash-sub').innerText = `Voici un aperçu de l'activité du ${club.name}.`;
+
+  document.getElementById('club-screen').classList.remove('show');
+  document.getElementById('app').classList.add('ready');
+
+  renderKanban();
+  renderDashboard();
+  goToView('dash');
+  if(!silent) closeSidebarMobile();
+}
+
+function openClubSwitcher(){
+  pendingClubId = selectedClubId;
+  document.getElementById('app').classList.remove('ready');
+  document.getElementById('club-screen').classList.add('show');
+  document.querySelectorAll('.club-tile').forEach(t => {
+    t.classList.toggle('selected', t.dataset.club === selectedClubId);
+  });
+  document.getElementById('enter-club-btn').disabled = !selectedClubId;
+  closeSidebarMobile();
+}
+
+function logout(){
+  saveSession(null);
+  document.getElementById('app').classList.remove('ready');
+  document.getElementById('club-screen').classList.remove('show');
+  document.getElementById('auth-screen').style.display = 'flex';
+  selectedClubId = null; pendingClubId = null;
+  document.getElementById('enter-club-btn').disabled = true;
+  document.querySelectorAll('.club-tile').forEach(t => t.classList.remove('selected'));
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-username').value = '';
+  document.getElementById('auth-club-select').value = '';
+}
+
+// ============================================================
+// View navigation
+// ============================================================
+function goToView(name){
+  currentView = name;
+  const navDash = document.getElementById('nav-dash-btn');
+  const navBoard = document.getElementById('nav-board-btn');
+  const viewDash = document.getElementById('dashboard-view');
+  const viewBoard = document.getElementById('board-view');
+  const title = document.getElementById('view-title');
+  if(name === 'dash'){
+    navDash.classList.add('active'); navBoard.classList.remove('active');
+    viewDash.classList.add('active'); viewBoard.classList.remove('active');
+    title.innerText = 'Tableau de bord';
+    renderDashboard(document.getElementById('search-input').value);
+  } else {
+    navBoard.classList.add('active'); navDash.classList.remove('active');
+    viewBoard.classList.add('active'); viewDash.classList.remove('active');
+    const club = clubById(selectedClubId);
+    title.innerText = `Gestion · ${club ? club.name : ''}`;
+    renderKanban(document.getElementById('search-input').value);
+  }
+  closeSidebarMobile();
+}
+
+function closeSidebarMobile(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('show');
+}
+
+// ============================================================
+// Kanban board (localStorage)
+// ============================================================
+function getBoard(){
+  if(!selectedClubId) return { todo:[], doing:[], done:[] };
+  if(!state.boards[selectedClubId]){
+    state.boards[selectedClubId] = JSON.parse(JSON.stringify(DEFAULT_BOARDS[selectedClubId] || { todo:[], doing:[], done:[] }));
+    saveState(state);
+  }
+  return state.boards[selectedClubId];
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function matchesSearch(text, query){
+  if(!query) return true;
+  return text.toLowerCase().includes(query.toLowerCase());
+}
+
+const STATUS_LABELS = { todo:'À Faire', doing:'En Cours', done:'Terminé' };
+const STATUS_ORDER = ['todo','doing','done'];
+
+function renderKanban(query){
+  if(!selectedClubId) return;
+  const board = getBoard();
+  ['todo','doing','done'].forEach(status => {
+    const container = document.getElementById(`cards-${status}`);
+    const countBadge = document.getElementById(`count-${status}`);
+    container.innerHTML = '';
+    const items = board[status].filter(t => matchesSearch(t, query));
+    items.forEach((title, idx) => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'card';
+      cardEl.draggable = true;
+      cardEl.dataset.id = String(idx);
+      cardEl.dataset.status = status;
+      cardEl.innerHTML = `
+        <div class="ctitle">${escapeHtml(title)}</div>
+        <div class="card-bar">
+          <button class="status-pill ${status}" data-status-pill title="Changer le statut">
+            ${STATUS_LABELS[status]}
+            <span class="chev"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <button class="card-delete" title="Supprimer">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>`;
+      cardEl.addEventListener('dragstart', () => { dragCardId = cardEl.dataset.id; cardEl.classList.add('dragging'); });
+      cardEl.addEventListener('dragend', () => { dragCardId = null; cardEl.classList.remove('dragging'); });
+      cardEl.querySelector('.status-pill').addEventListener('click', e => {
+        e.stopPropagation();
+        openStatusMenu(e.currentTarget, status, idx);
+      });
+      cardEl.querySelector('.card-delete').addEventListener('click', e => {
+        e.stopPropagation();
+        deleteCard(status, parseInt(cardEl.dataset.id, 10));
+      });
+      container.appendChild(cardEl);
+    });
+    countBadge.innerText = items.length;
+  });
+
+  // Drop targets
+  document.querySelectorAll('.list-cards').forEach(col => {
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', e => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const targetStatus = col.parentElement.dataset.status;
+      if(dragCardId === null) return;
+      const cardEl = document.querySelector(`.card[data-id="${dragCardId}"]`);
+      if(!cardEl) return;
+      const fromStatus = cardEl.dataset.status;
+      const fromIdx = parseInt(cardEl.dataset.id, 10);
+      if(fromStatus === targetStatus) return;
+      moveCard(fromStatus, fromIdx, targetStatus);
+    });
+  });
+
+  document.getElementById('stat-active').innerText = board.todo.length + board.doing.length;
+  document.getElementById('stat-done').innerText = board.done.length;
+}
+
+function openStatusMenu(pillEl, fromStatus, fromIdx){
+  const menu = document.getElementById('status-menu');
+  menu.innerHTML = STATUS_ORDER.map(s => `
+    <button class="status-menu-item ${s === fromStatus ? 'current' : ''}" data-target="${s}">
+      <span class="mi-dot status-dot ${s}"></span>
+      <span>${STATUS_LABELS[s]}</span>
+      <span class="mi-check"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+    </button>`).join('');
+  const rect = pillEl.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 6) + 'px';
+  menu.style.left = Math.min(rect.left, window.innerWidth - 180) + 'px';
+  menu.classList.add('show');
+  menu.querySelectorAll('.status-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.target;
+      menu.classList.remove('show');
+      if(target !== fromStatus) moveCard(fromStatus, fromIdx, target);
+    });
+  });
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('status-menu');
+  if(!menu.classList.contains('show')) return;
+  if(!menu.contains(e.target) && !e.target.closest('.status-pill')) menu.classList.remove('show');
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') document.getElementById('status-menu').classList.remove('show');
+});
+
+function openAddCardForm(status){
+  const col = document.querySelector(`.list-col[data-status="${status}"]`);
+  const btn = col.querySelector('.add-card-btn');
+  if(col.querySelector('.add-card-form')) return;
+  btn.style.display = 'none';
+  const form = document.createElement('div');
+  form.className = 'add-card-form';
+  form.innerHTML = `
+    <input type="text" placeholder="Intitulé de la carte..." autofocus>
+    <div class="row">
+      <button class="save">Ajouter</button>
+      <button class="cancel">Annuler</button>
+    </div>`;
+  const input = form.querySelector('input');
+  input.focus();
+  form.querySelector('.save').addEventListener('click', () => {
+    const v = input.value.trim();
+    if(!v) return;
+    getBoard()[status].push(v);
+    saveState(state);
+    renderKanban(document.getElementById('search-input').value);
+    renderDashboard(document.getElementById('search-input').value);
+  });
+  form.querySelector('.cancel').addEventListener('click', () => {
+    form.remove(); btn.style.display = '';
+  });
+  input.addEventListener('keydown', e => {
+    if(e.key === 'Enter') form.querySelector('.save').click();
+    if(e.key === 'Escape') form.querySelector('.cancel').click();
+  });
+  col.appendChild(form);
+}
+
+function deleteCard(status, idx){
+  const board = getBoard();
+  if(isNaN(idx) || idx < 0 || idx >= board[status].length) return;
+  board[status].splice(idx, 1);
+  saveState(state);
+  renderKanban(document.getElementById('search-input').value);
+  renderDashboard(document.getElementById('search-input').value);
+}
+
+function moveCard(fromStatus, fromIdx, toStatus){
+  const board = getBoard();
+  if(isNaN(fromIdx) || fromIdx < 0 || fromIdx >= board[fromStatus].length) return;
+  const [item] = board[fromStatus].splice(fromIdx, 1);
+  board[toStatus].push(item);
+  saveState(state);
+  renderKanban(document.getElementById('search-input').value);
+  renderDashboard(document.getElementById('search-input').value);
+}
+
+// ============================================================
+// Dashboard recent activity
+// ============================================================
+function renderDashboard(query){
+  if(!selectedClubId) return;
+  const board = getBoard();
+  const rows = [];
+  const meta = { todo:{label:'À faire', cls:'badge-todo'}, doing:{label:'En cours', cls:'badge-doing'}, done:{label:'Terminé', cls:'badge-done'} };
+  ['todo','doing','done'].forEach(status => {
+    board[status].forEach(title => {
+      if(matchesSearch(title, query)) rows.push({ title, status });
+    });
+  });
+  const container = document.getElementById('dash-recent');
+  if(rows.length === 0){
+    container.innerHTML = `<div class="dash-empty">Aucune activité pour le moment.</div>`;
+    return;
+  }
+  container.innerHTML = rows.slice(0, 8).map(r => `
+    <div class="dash-recent-row">
+      <span class="badge ${meta[r.status].cls}">${meta[r.status].label}</span>
+      <span class="title">${escapeHtml(r.title)}</span>
+    </div>`).join('');
+}
+
+// ============================================================
+// Local AI assistant (rule-based, offline)
+// ============================================================
+const AI_KB = [
+  { kw:['bonjour','salut','hello','hi','salam','مرحبا','السلام'], a:'Bonjour ! Bienvenue au Complexe Jeunes Gabès. Comment puis-je vous aider aujourd\'hui ?' },
+  { kw:['adresse','où','localisation','location','adresse','مكان','أين'], a:'Le Complexe Jeunes Gabès se trouve dans le district universitaire de Zrig, à Gabès, Tunisie. Téléphone : +216 75 398 204.' },
+  { kw:['contact','téléphone','phone','numéro','appel','هاتف','اتصال'], a:'Vous pouvez joindre le complexe au +216 75 398 204, ou via la page Facebook officielle « Complexe Jeunes Gabes ».' },
+  { kw:['horaires','ouvert','heure','ouverture','ساعات','دوام'], a:'Les horaires varient selon les activités. Pour confirmer, contactez le complexe au +216 75 398 204 ou consultez la page Facebook officielle.' },
+  { kw:['inscription','s\'inscrire','rejoindre','register','enroll','تسجيل','انضمام'], a:'L\'inscription dépend de l\'activité choisie. Indiquez-moi le club qui vous intéresse (Cyclisme, Échecs, Dev Web, Musique, Photo, Théâtre) et je vous oriente. Documents souvent demandés : pièce d\'identité ou extrait de naissance, photos, et fiche d\'adhésion.' },
+  { kw:['cyclisme','vélo','دراجات'], a:'Le Club Cyclisme organise des sorties, l\'entretien des vélos communs et des compétitions régionales. Pensez à réserver la salle omnisports et à planifier la sortie du samedi !' },
+  { kw:['échecs','echec','شطرنج'], a:'Le Club Échecs propose des tournois hebdomadaires, des ouvertures et l\'analyse de parties. Le tournoi mensuel est à préparer à l\'avance.' },
+  { kw:['dev','web','code','informatique','برمجة','ويب'], a:'Le club Développement Web propose des ateliers de code, des projets collectifs et du mentorat technique. Vous pouvez lancer les inscriptions du club informatique ou créer la charte graphique du site.' },
+  { kw:['musique','concert','موسيقى'], a:'Le Club Musique propose des répétitions, des jam sessions et des petits concerts au complexe. Réservez la salle de répétition et préparez votre set !' },
+  { kw:['photo','photographie','صور','تصوير'], a:'Le Club Photographie organise des sorties photo, de la retouche et une exposition annuelle. La sortie photo côtière est une belle activité à planifier.' },
+  { kw:['théâtre','theatre','pièce','مسرح'], a:'Le Club Théâtre propose de l\'improvisation, de la mise en scène et des pièces de fin d\'année. Distribuez les rôles puis enchaînez les répétitions acte par acte.' },
+  { kw:['événement','event','activité','evenement','فعالية','نشاط'], a:'Les événements sont annoncés sur la page Facebook officielle « Complexe Jeunes Gabes ». Pour organiser le vôtre, réservez l\'espace via le complexe.' },
+  { kw:['facebook','page','réseau','social','فيسبوك'], a:'La page officielle est « Complexe Jeunes Gabes » sur Facebook. C\'est la meilleure source pour le programme à jour.' },
+  { kw:['mission','but','objectif','رسالة','هدف'], a:'Le complexe offre des activités éducatives, culturelles, technologiques, sportives et de développement personnel pour les jeunes : développer les compétences, encourager la créativité, soutenir les talents et créer un espace d\'apprentissage collaboratif.' },
+  { kw:['merci','thanks','thank','شكرا'], a:'Avec plaisir ! N\'hésitez pas si vous avez d\'autres questions sur le complexe ou vos clubs.' },
+];
+
+const AI_FALLBACK = `Je n'ai pas d'info précise là-dessus. Pour les détails à jour, contactez le Complexe Jeunes Gabès au +216 75 398 204 ou via la page Facebook officielle « Complexe Jeunes Gabes ».`;
+
+const AI_TASK_IDEAS = {
+  cyclisme: ['Planifier la prochaine sortie vélo du week-end','Organiser une session d\'entretien des vélos','Contacter les partenaires pour le tournoi régional'],
+  echecs: ['Préparer les échiquiers pour le tournoi','Imprimer les feuilles de parties','Annoncer le tournoi sur les réseaux'],
+  devweb: ['Préparer le support du prochain atelier','Mettre en place un projet de démonstration','Organiser une session de mentorat'],
+  musique: ['Réserver la salle de répétition','Préparer la setlist du concert','Faire l\'inventaire du matériel'],
+  photo: ['Choisir le thème de la prochaine sortie','Préparer l\'exposition annuelle','Organiser un atelier retouche'],
+  theatre: ['Distribuer les rôles de la pièce','Planifier les répétitions du deuxième acte','Préparer les décors'],
+};
+
+function aiAnswer(question){
+  const q = question.toLowerCase();
+  // Task idea intent
+  if(/(idée|idea|sugg|tâche|tache|task|propos|اقترح|فكرة)/i.test(q)){
+    const club = clubById(selectedClubId);
+    const ideas = club ? (AI_TASK_IDEAS[club.id] || []) : [];
+    if(ideas.length){
+      return `Voici quelques idées de tâches pour ${club.name} :\n• ${ideas.join('\n• ')}\n\nAjoutez-les via le bouton « + Ajouter une carte » du tableau.`;
+    }
+    return 'Sélectionnez un club dans l\'application et je vous proposerai des idées de tâches adaptées.';
+  }
+  for(const entry of AI_KB){
+    if(entry.kw.some(k => q.includes(k))) return entry.a;
+  }
+  return AI_FALLBACK;
+}
+
+function sendAIMessage(){
+  const input = document.getElementById('ai-input');
+  const txt = input.value.trim();
+  if(!txt) return;
+  addAIMsg('user', txt);
+  input.value = '';
+  setAIBusy(true, 'Réflexion en cours...');
+  setTimeout(() => {
+    const answer = aiAnswer(txt);
+    setAIBusy(false);
+    addAIMsg('bot', answer);
+  }, 450 + Math.random() * 350);
+}
+
+function addAIMsg(role, text){
+  const body = document.getElementById('ai-chat-body');
+  const status = document.getElementById('ai-status');
+  const el = document.createElement('div');
+  el.className = `ai-msg ${role}`;
+  el.innerText = text;
+  body.insertBefore(el, status);
+  body.scrollTop = body.scrollHeight;
+}
+
+function setAIBusy(busy, label){
+  const status = document.getElementById('ai-status');
+  const input = document.getElementById('ai-input');
+  const send = document.getElementById('ai-send-btn');
+  status.classList.toggle('show', busy);
+  if(label) document.getElementById('ai-status-text').innerText = label;
+  input.disabled = busy;
+  send.disabled = busy;
+  const body = document.getElementById('ai-chat-body');
+  body.scrollTop = body.scrollHeight;
+}
+</script>
+
+</body>
+</html>
